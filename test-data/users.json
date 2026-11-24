@@ -1,0 +1,46 @@
+{
+  "validUsers": [
+    {
+      "id": "TC-LOGIN-001",
+      "description": "Standard user can log in",
+      "username": "standard_user",
+      "password": "secret_sauce"
+    },
+    {
+      "id": "TC-LOGIN-002",
+      "description": "Performance glitch user can log in",
+      "username": "performance_glitch_user",
+      "password": "secret_sauce"
+    }
+  ],
+  "invalidUsers": [
+    {
+      "id": "TC-LOGIN-003",
+      "description": "Locked out user cannot log in",
+      "username": "locked_out_user",
+      "password": "secret_sauce",
+      "expectedError": "Epic sadface: Sorry, this user has been locked out."
+    },
+    {
+      "id": "TC-LOGIN-004",
+      "description": "Wrong password is rejected",
+      "username": "standard_user",
+      "password": "wrong_password",
+      "expectedError": "Epic sadface: Username and password do not match any user in this service"
+    },
+    {
+      "id": "TC-LOGIN-005",
+      "description": "Empty username is rejected",
+      "username": "",
+      "password": "secret_sauce",
+      "expectedError": "Epic sadface: Username is required"
+    },
+    {
+      "id": "TC-LOGIN-006",
+      "description": "Empty password is rejected",
+      "username": "standard_user",
+      "password": "",
+      "expectedError": "Epic sadface: Password is required"
+    }
+  ]
+}
