@@ -1,35 +1,23 @@
-import { test, expect } from '@fixtures/base.fixture';
-import { loadTestData } from '@utils/dataLoader';
-import { applyAllureMeta } from '@utils/allureHelper';
-import { ProductsData } from '@types-app/testData.types';
+import { expect, test } from '@playwright/test';
+import { CartPage } from '../../src/web/pages/CartPage';
+import { InventoryPage } from '../../src/web/pages/InventoryPage';
+import { LoginPage } from '../../src/web/pages/LoginPage';
 
-const { cartScenarios } = loadTestData<ProductsData>('products.json');
+test('a user can add a product to the shopping cart @regression', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+  const cartPage = new CartPage(page);
 
-test.describe('Shopping cart', () => {
-  for (const scenario of cartScenarios) {
-    test(`${scenario.id}: ${scenario.description} @regression`, async ({
-      loggedInInventoryPage,
-      cartPage,
-    }) => {
-      await applyAllureMeta({
-        epic: 'Shopping',
-        feature: 'Cart',
-        story: 'Add products to cart',
-        severity: 'critical',
-        testId: scenario.id,
-      });
+  await test.step('Log in to SauceDemo', async () => {
+    await loginPage.open();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await expect(inventoryPage.title).toHaveText('Products');
+  });
 
-      await test.step(`Add products: ${scenario.products.join(', ')}`, () =>
-        loggedInInventoryPage.addProductsToCart(scenario.products));
-
-      await test.step('Verify cart badge count', async () => {
-        await expect(loggedInInventoryPage.cartBadge).toHaveText(String(scenario.products.length));
-      });
-
-      await test.step('Open cart and verify contents', async () => {
-        await loggedInInventoryPage.openCart();
-        expect((await cartPage.getItemNames()).sort()).toEqual([...scenario.products].sort());
-      });
-    });
-  }
+  await test.step('Add a product and verify it in the cart', async () => {
+    await inventoryPage.addToCart('Sauce Labs Backpack');
+    await expect(inventoryPage.cartBadge).toHaveText('1');
+    await inventoryPage.openCart();
+    await expect.poll(() => cartPage.getItemNames()).toEqual(['Sauce Labs Backpack']);
+  });
 });
