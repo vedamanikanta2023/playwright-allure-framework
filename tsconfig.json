@@ -15,7 +15,7 @@
     "paths": {
       "@config/*": ["src/config/*"],
       "@fixtures/*": ["src/fixtures/*"],
-      "@pages/*": ["src/pages/*"],
+      "@pages/*": ["src/web/pages/*"],
       "@types-app/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"]
     }

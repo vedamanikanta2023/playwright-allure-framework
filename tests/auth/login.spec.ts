@@ -1,47 +1,30 @@
-import { test, expect } from '@fixtures/base.fixture';
-import { loadTestData } from '@utils/dataLoader';
-import { applyAllureMeta } from '@utils/allureHelper';
-import { UsersData } from '@types-app/testData.types';
+// import { LoginPage } from "@pages/LoginPage";
+// import { test, expect } from "@playwright/test";
 
-const { validUsers, invalidUsers } = loadTestData<UsersData>('users.json');
+// test("check login", async ({ page }) => {
+//   const loginPage = new LoginPage(page);
+//   loginPage.
+//   // await page.goto("https://hyderabad.goadventure.in/admin");
+//   await page.goto("https://hyderabad.goadventure.in/admin/login");
+//   await page.getByRole("textbox", { name: "Phone number" }).click();
+//   await page.getByRole("textbox", { name: "Phone number" }).fill("9553322717");
+//   await page.getByRole("textbox", { name: "Password" }).click();
+//   await page.getByRole("textbox", { name: "Password" }).click();
+//   await page.getByRole("textbox", { name: "Password" }).fill("Admin@1234");
+//   await page.getByRole("textbox", { name: "Password" }).press("Enter");
+//   await expect(page).toHaveTitle("GoHyderabad Admin");
+// });
 
-test.describe('Login', () => {
-  for (const data of validUsers) {
-    test(`${data.id}: ${data.description} @smoke @regression`, async ({ loginPage, inventoryPage }) => {
-      await applyAllureMeta({
-        epic: 'Authentication',
-        feature: 'Login',
-        story: 'Successful login',
-        severity: 'blocker',
-        testId: data.id,
-      });
+import { test, expect } from '@fixtures/web.fixture';
+import { env } from '@config/env';
 
-      await test.step('Open login page', () => loginPage.open());
-      await test.step(`Log in as "${data.username}"`, () => loginPage.login(data.username, data.password));
-
-      await test.step('Verify inventory page is displayed', async () => {
-        await expect(inventoryPage.title).toHaveText('Products');
-        expect(await inventoryPage.getInventoryCount()).toBeGreaterThan(0);
-      });
-    });
+test('check login', async ({ loginPage, page }) => {
+  if (!env.adminPhone || !env.adminPassword) {
+    throw new Error('ADMIN_PHONE and ADMIN_PASSWORD must be configured in .env');
   }
 
-  for (const data of invalidUsers) {
-    test(`${data.id}: ${data.description} @regression`, async ({ loginPage }) => {
-      await applyAllureMeta({
-        epic: 'Authentication',
-        feature: 'Login',
-        story: 'Failed login',
-        severity: 'critical',
-        testId: data.id,
-      });
+  await loginPage.open();
+  await loginPage.login(env.adminPhone, env.adminPassword);
 
-      await test.step('Open login page', () => loginPage.open());
-      await test.step('Submit invalid credentials', () => loginPage.login(data.username, data.password));
-
-      await test.step('Verify error message', async () => {
-        await expect(loginPage.errorMessage).toHaveText(data.expectedError);
-      });
-    });
-  }
+  await expect(page).toHaveTitle('GoHyderabad Admin');
 });
