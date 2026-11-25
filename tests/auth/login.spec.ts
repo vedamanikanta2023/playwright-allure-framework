@@ -1,26 +1,30 @@
-import { expect, test } from '@playwright/test';
-import { InventoryPage } from '../../src/web/pages/InventoryPage';
-import { LoginPage } from '../../src/web/pages/LoginPage';
+// import { LoginPage } from "@pages/LoginPage";
+// import { test, expect } from "@playwright/test";
 
-test.describe('SauceDemo login', () => {
-  test('a standard user can log in @smoke', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const inventoryPage = new InventoryPage(page);
+// test("check login", async ({ page }) => {
+//   const loginPage = new LoginPage(page);
+//   loginPage.
+//   // await page.goto("https://hyderabad.goadventure.in/admin");
+//   await page.goto("https://hyderabad.goadventure.in/admin/login");
+//   await page.getByRole("textbox", { name: "Phone number" }).click();
+//   await page.getByRole("textbox", { name: "Phone number" }).fill("9553322717");
+//   await page.getByRole("textbox", { name: "Password" }).click();
+//   await page.getByRole("textbox", { name: "Password" }).click();
+//   await page.getByRole("textbox", { name: "Password" }).fill("Admin@1234");
+//   await page.getByRole("textbox", { name: "Password" }).press("Enter");
+//   await expect(page).toHaveTitle("GoHyderabad Admin");
+// });
 
-    await loginPage.open();
-    await loginPage.login('standard_user', 'secret_sauce');
+import { test, expect } from '@fixtures/web.fixture';
+import { env } from '@config/env';
 
-    await expect(inventoryPage.title).toHaveText('Products');
-  });
+test('check login', async ({ loginPage, page }) => {
+  if (!env.adminPhone || !env.adminPassword) {
+    throw new Error('ADMIN_PHONE and ADMIN_PASSWORD must be configured in .env');
+  }
 
-  test('invalid credentials show an error @regression', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  await loginPage.open();
+  await loginPage.login(env.adminPhone, env.adminPassword);
 
-    await loginPage.open();
-    await loginPage.login('invalid_user', 'wrong_password');
-
-    await expect(loginPage.errorMessage).toHaveText(
-      'Epic sadface: Username and password do not match any user in this service',
-    );
-  });
+  await expect(page).toHaveTitle('GoHyderabad Admin');
 });

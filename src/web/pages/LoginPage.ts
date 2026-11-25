@@ -1,27 +1,22 @@
-import { Locator, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
+import { loginLocators } from '../locators/login.locators';
 import { BasePage } from './BasePage';
 
 export class LoginPage extends BasePage {
-  private readonly usernameInput: Locator;
-  private readonly passwordInput: Locator;
-  private readonly loginButton: Locator;
-  readonly errorMessage: Locator;
+  readonly locators: ReturnType<typeof loginLocators>;
 
   constructor(page: Page) {
     super(page);
-    this.usernameInput = page.getByTestId('username');
-    this.passwordInput = page.getByTestId('password');
-    this.loginButton = page.getByTestId('login-button');
-    this.errorMessage = page.getByTestId('error');
+    this.locators = loginLocators(page);
   }
 
   async open(): Promise<void> {
-    await this.goto('/');
+    await this.goto('/admin/login');
   }
 
-  async login(username: string, password: string): Promise<void> {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
+  async login(phone: string, password: string): Promise<void> {
+    await this.locators.phoneInput.fill(phone);
+    await this.locators.passwordInput.fill(password);
+    await this.locators.passwordInput.press('Enter');
   }
 }
