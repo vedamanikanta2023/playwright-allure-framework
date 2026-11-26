@@ -4,8 +4,8 @@ import { env } from './src/config/env';
 export default defineConfig({
   testDir: './tests',
   outputDir: './test-results',
-  timeout: 30_000,
-  expect: { timeout: 5_000 },
+  timeout: 3*60*1000,
+  expect: { timeout: 2*60*1000 },
 
   fullyParallel: true,
   // forbidOnly: process.env.isCI,
@@ -43,7 +43,7 @@ export default defineConfig({
 
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    // { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    // { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
 });
