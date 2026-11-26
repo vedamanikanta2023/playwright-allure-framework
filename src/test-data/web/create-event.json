@@ -1,0 +1,19 @@
+{
+    "createEventCases": [
+        {
+            "slug": "anirudh-live-985",
+            "category": "Demo trip category",
+            "venueName": "uppal stadium",
+            "venueAddress": "near uppal",
+            "venueImage": "screenshots/screenshot.png",
+            "price": 3000,
+            "bookingWhatsappNumber": "9685741452",
+            "popupImage": "screenshots/screenshot.png",
+            "popupOrder": 2,
+            "bookingType": "Individual and group",
+            "maxParticipantsPerBooking": 10,
+            "cancellationCutoffHours": 3,
+            "advanceBasisPoints": 10
+        }
+    ]
+}

@@ -40,3 +40,20 @@ export interface ProductsData {
   cartScenarios: CartScenario[];
   checkoutScenarios: CheckoutScenario[];
 }
+
+
+export interface NewEventFormData {
+  slug: string;
+  category: string;
+  venueName: string;
+  venueAddress: string;
+  venueImage: string;
+  price: number;
+  bookingWhatsappNumber: string;
+  popupImage: string;
+  popupOrder: number | null;
+  bookingType: string;
+  maxParticipantsPerBooking: number;
+  cancellationCutoffHours: number;
+  advanceBasisPoints: number;
+}
