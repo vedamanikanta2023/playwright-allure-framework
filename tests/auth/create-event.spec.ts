@@ -1,12 +1,12 @@
-import path from "node:path";
 import { test, expect } from "@fixtures/web.fixture";
 import createEventData from "../../src/test-data/web/create-event.json";
 import type { NewEventFormData } from "@types-app/testData.types";
 import { formatSlug } from "@utils/string-utils";
+import { getTestFile } from "@utils/file-helper";
 
 test.describe("Create event", () => {
   for (const data of createEventData.createEventCases) {
-    test(`creates event from data: ${data.slug}`, async ({
+    test(`creates event from data: ${data.slug} `, async ({
       createEvent,
       loggedInAdmin,
       page,
@@ -20,8 +20,8 @@ test.describe("Create event", () => {
       const event: NewEventFormData = {
         ...data,
         slug: `${data.slug.toLowerCase()}`,
-        venueImage: path.resolve(process.cwd(), data.venueImage),
-        popupImage: path.resolve(process.cwd(), data.popupImage),
+        venueImage: getTestFile(data.venueImage),
+        popupImage: getTestFile(data.popupImage),
       };
       await test.step("Fill and save the event", () =>
         createEvent.createNewEvent(event));
@@ -35,5 +35,6 @@ test.describe("Create event", () => {
         ).toBeVisible({ timeout: 30000 });
       });
     });
+
   }
 });
