@@ -1,7 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 import { LoginPage } from "@pages/LoginPage";
 import { CreateEvent } from '@pages/CreateEvent';
-import credentials from "../test-data/web/login.json";
+import { env } from "@config/env";
 
 type WebFixtures = {
   loginPage: LoginPage;  
@@ -15,8 +15,14 @@ export const test = base.extend<WebFixtures>({
   createEvent: async ({ page }, use) => use(new CreateEvent(page)),
 
   loggedInAdmin: async ({ loginPage, page }, use) => {
+    if (!env.adminPhone || !env.adminPassword) {
+      throw new Error(
+        "ADMIN_PHONE and ADMIN_PASSWORD must be configured in .env",
+      );
+    }
+
     await loginPage.open();
-    await loginPage.login(credentials.ADMIN_PHONE, credentials.ADMIN_PASSWORD);
+    await loginPage.login(env.adminPhone, env.adminPassword);
     await expect(page).toHaveTitle('GoHyderabad Admin');
     await use();
   },
