@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 import { env } from './src/config/env';
+import path from 'node:path';
+
+const authFile = path.join(__dirname, 'playwright', '.auth', 'admin.json');
 
 export default defineConfig({
   testDir: './tests',
@@ -42,7 +45,18 @@ export default defineConfig({
   },
 
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+    },
+    {
+      name: 'chromium',
+      dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: authFile,
+      },
+    },
     // { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
     // { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],

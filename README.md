@@ -43,6 +43,12 @@ npm run test:regression   # only @regression
 npm run test:headed       # watch the browser
 ```
 
+The admin session is saved in `playwright/.auth/admin.json` and reused by the
+test suite. Playwright checks the saved session before each run and logs in
+again only if it has expired or is missing. Configure `ADMIN_PHONE` and
+`ADMIN_PASSWORD` in `.env` to create or refresh the session. The saved
+credentials/session file is ignored by Git.
+
 ## Allure report
 
 ```bash

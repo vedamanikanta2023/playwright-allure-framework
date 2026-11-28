@@ -1,6 +1,8 @@
 import { test, expect } from "@fixtures/web.fixture";
 import { env } from "@config/env";
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test("check login", async ({ loginPage, page }) => {
   if (!env.adminPhone || !env.adminPassword) {
     throw new Error(
