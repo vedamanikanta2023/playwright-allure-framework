@@ -1,4 +1,4 @@
-import { expect, test as setup } from '@playwright/test';
+import { Browser, expect, test as setup } from '@playwright/test';
 import { existsSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
@@ -36,18 +36,17 @@ setup('reuse or create admin session', async ({ browser }) => {
   }
 });
 
-async function hasValidSession(browser: import('@playwright/test').Browser): Promise<boolean> {
+async function hasValidSession(browser: Browser): Promise<boolean> {
   const context = await browser.newContext({ storageState: authFile });
   try {
     const page = await context.newPage();
     await page.goto(new URL('/admin', env.baseUrl).toString());
 
-    if (await page.getByRole('textbox', { name: 'Phone number' }).isVisible()) {
-      return false;
-    }
-
-    await expect(page.getByRole('link', { name: 'New event' })).toBeVisible();
-    return true;
+    // Logged in = the "New event" link appears. Anything else = session is not valid.
+    return await page
+      .getByRole('link', { name: 'New event' })
+      .waitFor({ state: 'visible', timeout: 7_000 })
+      .then(() => true, () => false);
   } finally {
     await context.close();
   }
