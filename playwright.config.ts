@@ -46,6 +46,13 @@ export default defineConfig({
 
   projects: [
     {
+      name: 'api',
+      testMatch: /tests\/api\/.*\.spec\.ts/,
+      use: {
+        baseURL: env.apiBaseUrl,
+      },
+    },
+    {
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
     },

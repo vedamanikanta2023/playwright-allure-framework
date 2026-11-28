@@ -13,6 +13,7 @@
     "noImplicitReturns": true,
     "baseUrl": ".",
     "paths": {
+      "@api/*": ["src/api/*"],
       "@config/*": ["src/config/*"],
       "@fixtures/*": ["src/fixtures/*"],
       "@pages/*": ["src/web/pages/*"],
